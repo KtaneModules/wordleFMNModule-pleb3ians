@@ -14,8 +14,10 @@ MonoBehaviour:
   id: wordleFMN
   title: Wordle Me Not
   author: plebeians
-  description: "You'll need more than a mind of steel and \"CRATE\"...\n\r\nManual
-    \n\nModule ID: wordleFMN\n\r\nModule created by plebeians."
+  description: "You'll need more than a mind of steel and \"CRATE\"...\n\r\nTake note
+    of a sequence of colors after every solve, and submit a set of words that follow
+    a modified version of Wordle rules.\n\nManual link coming soon.\n\nModule ID:
+    wordleFMN\n\r\nModule created by plebeians."
   version: 0.3
   outputFolder: build
   previewImage: {fileID: 2800000, guid: d5088ed852ecdbd4eabedcadb6c65a03, type: 3}
