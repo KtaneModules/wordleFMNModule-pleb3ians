@@ -206,14 +206,6 @@ public class wordleDictionary {
 	public static int GetLength(){
 		return dictionary.Length;
 	}
-	private static int convertColorsToSimiliarityIndex(String colors){
-		int similarity = 0;
-		for (int i = 0; i < 5; i++){
-			similarity *= 3;
-			similarity += Int32.Parse(colors.Substring(i, 1)) - 1;
-		}
-		return similarity;
-	}
 
 	public static String GetWord(int index){
 		return dictionary[index];
