@@ -11,13 +11,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615501dbe4f3fe94fbf4b564abb10237, type: 3}
   m_Name: ModConfig
   m_EditorClassIdentifier: 
-  id: wordleFMN
-  title: Wordle Me Not
+  id: forgetle
+  title: Forgetle
   author: plebeians
   description: "You'll need more than a mind of steel and \"CRATE\"...\n\r\nTake note
     of a sequence of colors after every solve, and submit a set of words that follow
-    a modified version of Wordle rules.\n\nManual link coming soon.\n\nModule ID:
-    wordleFMN\n\r\nModule created by plebeians."
-  version: 0.3
+    a modified version of Wordle rules.\n\nManual HTML: https://ktane.timwi.de/HTML/Forgetle.html\nManual
+    PDF: https://ktane.timwi.de/PDF/Forgetle.pdf\n\nModule ID: forgetle\n\r\nModule
+    created by plebeians."
+  version: 1.1
   outputFolder: build
   previewImage: {fileID: 2800000, guid: d5088ed852ecdbd4eabedcadb6c65a03, type: 3}

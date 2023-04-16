@@ -210,44 +210,60 @@ public class wordleDictionary {
 	public static String GetWord(int index){
 		return dictionary[index];
 	}
+    
 	public static bool HasWord(String word){
 		return dictionary.Contains(word);
 	}
 
-	public static String[][] GenerateListOfWordsAndColors(int amount, int ModuleID){
-		if (amount > 1){
-			int count = 0;
-			String[] words = new String[amount];
-			String[] colors = new String[amount - 1];
-			String[][] wordsAndColors = {words, colors};
-			wordsAndColors[0] = words;
-			while (count < amount){
+    // Add single stage of words and colors to list
+    public static void GenerateSingleStage(String[][] data, int stageNumber){
+        if (stageNumber == 0){
+           data[0][0] = dictionary[UnityEngine.Random.Range(0, dictionary.Length)];
+        } else {
+            int attempt = 0;
+            int maxMinSimilarity = -1;
+            String[] triedWords = new String[50];
+            String maxMinSimilarWord = "";
+            bool altWordSet = false;
+            bool wordGenerated = false;
+			while (!wordGenerated){
 				String word = dictionary[UnityEngine.Random.Range(0, dictionary.Length)];
-				if (words[0] == null){
-					words[0] = word;
-					count++;
-				}
-				else if (!words.Contains(word)){
-					int similarity = CalculateSimilarity(words[count - 1], word, colors, count - 1);
-					if (similarity > 3 && similarity < 9){
-						words[count] = word;
-						count++;
-					}
+                if (!triedWords.Contains(word) && !data[0].Contains(word)){
+                    triedWords[attempt] = word;
+                    int similarity = CalculateSimilarityAndSetColors(data[0][stageNumber - 1], word, data[1], stageNumber - 1);
+                    if (similarity > 3 && similarity < 9){
+                        data[0][stageNumber] = word;
+                        wordGenerated = true;
+                    } else if (attempt > 48 || attempt * 2 >= dictionary.Length - stageNumber){
+                        for (int i = 0; i <= attempt; i++){
+                            triedWords[i] = null;
+                        }
+                        data[0][stageNumber] = maxMinSimilarWord;
+                        wordGenerated = true;
+                    } else {
+                        if (similarity < 9 && similarity > maxMinSimilarity || !altWordSet) {
+                            maxMinSimilarity = similarity;
+                            maxMinSimilarWord = word;
+                            altWordSet = true;
+                        }
+                    }
+                    attempt++;
 				}
 			}
-			return wordsAndColors;
-		} else {
-			return null;
-		}
-	}
+        }
 
-	public static int CalculateSimilarity(String wordBefore, String wordAfter, String[] colorList, int index){
+    }
+
+    // Adds colors of an attempted word to color list
+    // Returns similarity score where green = 3, yellow = 1, and black = 0
+	public static int CalculateSimilarityAndSetColors(String wordBefore, String wordAfter, String[] colorList, int index){
 		int similarity = 0;
 		int minIndex = 5;
 		char[] colors = {'1', '1', '1', '1', '1'};
 		char[] wordOne = wordBefore.ToCharArray();
 		char[] wordTwo = wordAfter.ToCharArray();
 		for (int i = 0; i < 5; i++){
+			
 			if (wordOne[i] == wordTwo[i]){
 				wordOne[i] = '#';
 				wordTwo[i] = '#';
@@ -257,12 +273,12 @@ public class wordleDictionary {
 				minIndex = i;
 			}
 		}
-		for (int i = 0; i < 5 - minIndex; i++){
-			if (wordOne[minIndex + i] != '#'){
-				for (int j = 1; j < 5 - minIndex; j++){
-					if (wordTwo[((j + i) % (5 - minIndex) + minIndex)] != '#' && 
-						wordTwo[((j + i) % (5 - minIndex) + minIndex)] == wordOne[i]){
-						wordTwo[((j + i) % (5 - minIndex) + minIndex)] = '#';
+		for (int i = 0; i < 5; i++){
+			if (wordOne[i] != '#'){
+				for (int j = 1; j < 5; j++){
+					if (wordTwo[(j + i) % 5] != '#' && 
+						wordTwo[(j + i) % 5] == wordOne[i]){
+						wordTwo[(j + i) % 5] = '#';
 						wordOne[i] = '#';
 						colors[i] = '2';
 						similarity += 1;
@@ -275,6 +291,7 @@ public class wordleDictionary {
 		return similarity;
 	}
 	
+    // Returns exact similarity (turns colors into a base-3 number)
     public static int CalculateExactSimilarity(String wordBefore, String wordAfter){
 		int minIndex = 5;
 		int[] colors = {0, 0, 0, 0, 0};
@@ -289,11 +306,10 @@ public class wordleDictionary {
 				minIndex = i;
 			}
 		}
-		for (int i = 0; i < 5 - minIndex; i++){
-			if (wordOne[minIndex + i] != '#'){
-				for (int j = 1; j < 5 - minIndex; j++){
-					if (wordTwo[((j + i) % (5 - minIndex) + minIndex)] != '#' && 
-						wordTwo[((j + i) % (5 - minIndex) + minIndex)] == wordOne[i]){
+		for (int i = 0; i < 5; i++){
+			if (wordOne[i] != '#'){
+				for (int j = 1; j < 5; j++){
+					if (wordTwo[(j + i) % 5] != '#' && wordTwo[(j + i) % 5] == wordOne[i]){
 						wordTwo[((j + i) % (5 - minIndex) + minIndex)] = '#';
 						wordOne[i] = '#';
 						colors[i] = 1;
@@ -305,7 +321,7 @@ public class wordleDictionary {
 		int similarity = 0;
 		for (int i = 0; i < 5; i++){
 			similarity *= 3;
-			similarity += colors[i] - 1;
+			similarity += colors[i];
 		}
 		return similarity;
     }

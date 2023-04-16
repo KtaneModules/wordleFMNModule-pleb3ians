@@ -534,9 +534,9 @@ GameObject:
   - component: {fileID: 114020075812559634}
   - component: {fileID: 114945458905078922}
   - component: {fileID: 114078438042758174}
-  - component: {fileID: 114009801676317202}
+  - component: {fileID: 114643859960308462}
   m_Layer: 0
-  m_Name: wordleFMN
+  m_Name: forgetle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6430,14 +6430,14 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1845984214689150}
-  m_Text: '##'
+  m_Text: '?'
   m_OffsetZ: 0
   m_CharacterSize: 0.004
   m_LineSpacing: 1
   m_Anchor: 4
   m_Alignment: 1
   m_TabSize: 4
-  m_FontSize: 125
+  m_FontSize: 150
   m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 12800000, guid: 3b1d8082d28fc9840a0acb56856d027c, type: 3}
@@ -7116,73 +7116,6 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4278190080
---- !u!114 &114009801676317202
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1238387686238996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6aa08b425cc40a047b3d9447bd0f9c74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Audio: {fileID: 114244380273365144}
-  BombInfo: {fileID: 114544245042077652}
-  BossModule: {fileID: 114945458905078922}
-  textDisplays:
-  - {fileID: 102691758164180114}
-  - {fileID: 102745088677593718}
-  - {fileID: 102148375068935272}
-  - {fileID: 102184296021181020}
-  - {fileID: 102543100908508688}
-  - {fileID: 102025014208367044}
-  - {fileID: 102061098955171574}
-  - {fileID: 102485466327735224}
-  keyboardButtons:
-  - {fileID: 114252336036643992}
-  - {fileID: 114118537630282530}
-  - {fileID: 114263884392235400}
-  - {fileID: 114991657258165070}
-  - {fileID: 114699028910255170}
-  - {fileID: 114906504359710014}
-  - {fileID: 114843527421786456}
-  - {fileID: 114776282047052610}
-  - {fileID: 114847651436783082}
-  - {fileID: 114290136503052052}
-  - {fileID: 114742680171745204}
-  - {fileID: 114270925365590594}
-  - {fileID: 114800293112726970}
-  - {fileID: 114787991779379032}
-  - {fileID: 114505048887049538}
-  - {fileID: 114959668575069272}
-  - {fileID: 114818573959851790}
-  - {fileID: 114036414362592478}
-  - {fileID: 114911855448870094}
-  - {fileID: 114315846326399746}
-  - {fileID: 114698754488521132}
-  - {fileID: 114473528324857934}
-  - {fileID: 114130486465549250}
-  - {fileID: 114636327818396920}
-  - {fileID: 114864312435151070}
-  - {fileID: 114809799055231892}
-  - {fileID: 114934212449636776}
-  - {fileID: 114035892211130892}
-  cellColors:
-  - {fileID: 2100000, guid: 5f84e5a0881a33143b281fd3e6d9bb12, type: 2}
-  - {fileID: 2100000, guid: 710aa57e60bb242448324fc802156afb, type: 2}
-  - {fileID: 2100000, guid: 3f7a53f896c6a4d4a89a2952490892c3, type: 2}
-  - {fileID: 2100000, guid: b0eeca02ab55b7841ba0bbe9ed4097ac, type: 2}
-  - {fileID: 0}
-  cells:
-  - {fileID: 23436925941565944}
-  - {fileID: 23674026146959326}
-  - {fileID: 23712808098284248}
-  - {fileID: 23390013265410516}
-  - {fileID: 23484892270740286}
-  sounds: []
-  fontColors: []
-  ModuleSelectable: {fileID: 114078438042758174}
 --- !u!114 &114020075812559634
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7194,8 +7127,8 @@ MonoBehaviour:
   m_Script: {fileID: -119419473, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ModuleType: wordleFMN
-  ModuleDisplayName: Wordle Me Not
+  ModuleType: forgetle
+  ModuleDisplayName: Forgetle
   RequiresTimerVisibility: 0
 --- !u!114 &114022286153211688
 MonoBehaviour:
@@ -8376,6 +8309,71 @@ MonoBehaviour:
   m_Script: {fileID: -381104716, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114643859960308462
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1238387686238996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df3c844b5838b5947a775ba5a727a5d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Audio: {fileID: 114244380273365144}
+  BombInfo: {fileID: 114544245042077652}
+  BossModule: {fileID: 114945458905078922}
+  textDisplays:
+  - {fileID: 102691758164180114}
+  - {fileID: 102745088677593718}
+  - {fileID: 102148375068935272}
+  - {fileID: 102184296021181020}
+  - {fileID: 102543100908508688}
+  - {fileID: 102025014208367044}
+  keyboardButtons:
+  - {fileID: 114252336036643992}
+  - {fileID: 114118537630282530}
+  - {fileID: 114263884392235400}
+  - {fileID: 114991657258165070}
+  - {fileID: 114699028910255170}
+  - {fileID: 114906504359710014}
+  - {fileID: 114843527421786456}
+  - {fileID: 114776282047052610}
+  - {fileID: 114847651436783082}
+  - {fileID: 114290136503052052}
+  - {fileID: 114742680171745204}
+  - {fileID: 114270925365590594}
+  - {fileID: 114800293112726970}
+  - {fileID: 114787991779379032}
+  - {fileID: 114505048887049538}
+  - {fileID: 114959668575069272}
+  - {fileID: 114818573959851790}
+  - {fileID: 114036414362592478}
+  - {fileID: 114911855448870094}
+  - {fileID: 114315846326399746}
+  - {fileID: 114698754488521132}
+  - {fileID: 114473528324857934}
+  - {fileID: 114130486465549250}
+  - {fileID: 114636327818396920}
+  - {fileID: 114864312435151070}
+  - {fileID: 114809799055231892}
+  - {fileID: 114934212449636776}
+  - {fileID: 114035892211130892}
+  cellColors:
+  - {fileID: 2100000, guid: 5f84e5a0881a33143b281fd3e6d9bb12, type: 2}
+  - {fileID: 2100000, guid: 710aa57e60bb242448324fc802156afb, type: 2}
+  - {fileID: 2100000, guid: 3f7a53f896c6a4d4a89a2952490892c3, type: 2}
+  - {fileID: 2100000, guid: b0eeca02ab55b7841ba0bbe9ed4097ac, type: 2}
+  cells:
+  - {fileID: 23436925941565944}
+  - {fileID: 23674026146959326}
+  - {fileID: 23712808098284248}
+  - {fileID: 23390013265410516}
+  - {fileID: 23484892270740286}
+  sounds:
+  - {fileID: 8300000, guid: 66cb3566e8e554a48801e1a1c7be8a09, type: 3}
+  fontColors: []
+  ModuleSelectable: {fileID: 114078438042758174}
 --- !u!114 &114660050907866896
 MonoBehaviour:
   m_ObjectHideFlags: 1
