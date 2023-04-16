@@ -173,7 +173,7 @@ public class forgetleScript : MonoBehaviour
         } else {
             numStagesOnBomb = 6;
         }
-       
+    
         if (numStagesOnBomb < 2){
             // TestListGeneration(wordleDictionary.GetLength() - 1);
             SetUpNullVictory();
@@ -284,8 +284,8 @@ public class forgetleScript : MonoBehaviour
                 if (readySubmitStages){
                     SubmitLetter(action.name);
                 } else {
-                   Debug.LogFormat("[Forgetle #{0}] Striked for touching keyboard before solving all necessary modules!", ModuleID); 
-                   GetComponent<KMBombModule>().HandleStrike();
+                Debug.LogFormat("[Forgetle #{0}] Striked for touching keyboard before solving all necessary modules!", ModuleID); 
+                GetComponent<KMBombModule>().HandleStrike();
                 }
             }
         }
@@ -298,23 +298,23 @@ public class forgetleScript : MonoBehaviour
     // Returns a "list" of all possible words that follow the rules based on the previous stage
     // Compares pregenerated list entries to user entries to ensure they all have the same similarity
     private String ReturnPossiblePaths(int stageNumber){
-		sb.Length = 0;
+        sb.Length = 0;
         bool moreThanOne = false;
         int length = wordleDictionary.GetLength();
         sb.Append("{");
         for (int i = 0; i < length; i++){
             String wordleWord = wordleDictionary.GetWord(i);
             if (wordleDictionary.CalculateExactSimilarity(submitList[stageNumber - 1], wordleWord) == wordleDictionary.CalculateExactSimilarity(data[0][stageNumber - 1], data[0][stageNumber])){
-				if (moreThanOne){
+                if (moreThanOne){
                     sb.Append(", ");
                 }
                 sb.Append(wordleWord);
                 moreThanOne = true;
             }
-		}
+        }
         sb.Append("}");
-		return sb.ToString();
-	}
+        return sb.ToString();
+    }
 
     // Removes letter from current word submission
     private void RemoveLetter(){
@@ -424,21 +424,21 @@ public class forgetleScript : MonoBehaviour
     // Rewinds display after intial stages finish
     IEnumerator RewindDisplay(int tempCurrentStage){
         float delayTime = (float) (0.5);
-		while (tempCurrentStage > 1){
+        while (tempCurrentStage > 1){
             if (tempCurrentStage > 12){
                 tempCurrentStage -= (int)(tempCurrentStage / 6);
             } else {
                 tempCurrentStage--;
             }
-			
-			textDisplays[5].text = ("" + tempCurrentStage);
+            
+            textDisplays[5].text = ("" + tempCurrentStage);
             textDisplays[5].fontSize = returnFontSize(tempCurrentStage);
-			yield return new WaitForSeconds(delayTime / tempCurrentStage);
-		}
+            yield return new WaitForSeconds(delayTime / tempCurrentStage);
+        }
         textDisplays[5].text = ("1");
         displayRewound = true;
-		StopCoroutine(RewindDisplay(tempCurrentStage));
-	}
+        StopCoroutine(RewindDisplay(tempCurrentStage));
+    }
 
     // Method to reveal the next word and set of colors in a text-crawl style
     IEnumerator RevealWord(String desiredWord, String desiredColors){
@@ -449,7 +449,7 @@ public class forgetleScript : MonoBehaviour
             yield return new WaitForSeconds(0.02f);
         }
         StopCoroutine(RevealWord(desiredWord, desiredColors));
-	}
+    }
 
     // Method to calculate the font size for the stage number text mesh
     private int returnFontSize(int stageNumber){
