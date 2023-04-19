@@ -19,10 +19,11 @@ public class forgetleScript : MonoBehaviour
     public AudioClip[] sounds;
     public KMSelectable ModuleSelectable;
 
-    private char[] wordArr = {' ', ' ', ' ', ' ', ' '};
+    private char[] wordCharArr = {' ', ' ', ' ', ' ', ' '};
     private string[] wordList;
     private string[] submitList;
 
+    // Num of maximum stages that can be generated before the module breaks (it auto-switches to the submitting afterwards)
     private static int maxStages;
 
     private int numCurrentStage;
@@ -30,8 +31,8 @@ public class forgetleScript : MonoBehaviour
     private int numStagesOnBomb;
     private int numLettersInputted = 0;
     private int tempSolved = 0;
-    private String initialPaths;
-    private String possiblePaths; 
+    private String[] initialPaths;
+    private String[] possiblePaths; 
     private String[] ignoredModules = null;
     private String[] words;
     private String[] colors;
@@ -59,7 +60,7 @@ public class forgetleScript : MonoBehaviour
     private bool displayRewound = true;
 
     // Boolean switch to toggle between debug mode and play mode. Only for developers' use.
-    private bool debugMode = false;
+    private bool debugMode = true;
     
     void Awake()
     {
@@ -175,7 +176,7 @@ public class forgetleScript : MonoBehaviour
         }
     
         if (numStagesOnBomb < 2){
-            // TestListGeneration(wordleDictionary.GetLength() - 1);
+            TestListGeneration(20);
             SetUpNullVictory();
         } else {
             words = new String[numStagesOnBomb];
@@ -183,9 +184,9 @@ public class forgetleScript : MonoBehaviour
             data = new String[][] {words, colors};
             wordleDictionary.GenerateSingleStage(data, 0);
             submitList = new String[numStagesOnBomb];
-            submitList[0] = data[0][0];
+            submitList[0] = words[0];
             StartCoroutine(RevealWord(submitList[0].ToUpper(), "11111"));
-            Debug.LogFormat("[Forgetle #{0}] Initial word is '{1}'", ModuleID, data[0][0]);
+            Debug.LogFormat("[Forgetle #{0}] Initial word is '{1}'", ModuleID, words[0]);
         }
     }
 
@@ -205,7 +206,7 @@ public class forgetleScript : MonoBehaviour
                     if (numCurrentStage >= numStagesOnBomb || numCurrentStage >= maxStages){
                         initialPaths = ReturnPossiblePaths(1);
                         possiblePaths = initialPaths;
-                        Debug.LogFormat("[Forgetle #{0}] Stage 1 Possible Words: {1}", ModuleID, initialPaths);
+                        Debug.LogFormat("[Forgetle #{0}] Stage 1 Possible Words: {1}", ModuleID, returnReadableWordList(initialPaths));
                         StartCoroutine(RevealWord("_____", "11111"));
                         readySubmitStages = true;
                         int tempCurrentStage = numCurrentStage;
@@ -215,8 +216,8 @@ public class forgetleScript : MonoBehaviour
                     } else {
                         textDisplays[5].fontSize = returnFontSize(numCurrentStage);
                         wordleDictionary.GenerateSingleStage(data, numCurrentStage);
-                        Debug.LogFormat("[Forgetle #{0}] Stage {1} Colors - {2} [pregenerated word: '{3}']", ModuleID, numCurrentStage, GetColorDisplays(data[1][numCurrentStage - 1]), data[0][numCurrentStage]);
-                        StartCoroutine(RevealWord(GetColorDisplays(data[1][numCurrentStage - 1]), data[1][numCurrentStage - 1]));
+                        Debug.LogFormat("[Forgetle #{0}] Stage {1} Colors - {2} [pregenerated word: '{3}']", ModuleID, numCurrentStage, GetColorDisplays(colors[numCurrentStage - 1]), words[numCurrentStage]);
+                        StartCoroutine(RevealWord(GetColorDisplays(colors[numCurrentStage - 1]), colors[numCurrentStage - 1]));
                     }
                 }
 
@@ -295,25 +296,29 @@ public class forgetleScript : MonoBehaviour
         }
     }
 
-    // Returns a "list" of all possible words that follow the rules based on the previous stage
+    // Returns an array of all possible words that follow the rules based on the previous stage
     // Compares pregenerated list entries to user entries to ensure they all have the same similarity
-    private String ReturnPossiblePaths(int stageNumber){
+    private String[] ReturnPossiblePaths(int stageNumber){
         sb.Length = 0;
+        int count = 0;
         bool moreThanOne = false;
         int length = wordleDictionary.GetLength();
-        sb.Append("{");
         for (int i = 0; i < length; i++){
             String wordleWord = wordleDictionary.GetWord(i);
-            if (wordleDictionary.CalculateExactSimilarity(submitList[stageNumber - 1], wordleWord) == wordleDictionary.CalculateExactSimilarity(data[0][stageNumber - 1], data[0][stageNumber])){
+            if (wordleDictionary.CalculateExactSimilarity(submitList[stageNumber - 1], wordleWord) == wordleDictionary.CalculateExactSimilarity(words[stageNumber - 1], words[stageNumber])){
                 if (moreThanOne){
-                    sb.Append(", ");
+                    sb.Append(",");
                 }
+                count++;
                 sb.Append(wordleWord);
                 moreThanOne = true;
             }
         }
-        sb.Append("}");
-        return sb.ToString();
+        if (count > 0){
+            return (sb.ToString()).Split(',');
+        } else {
+            return null;
+        }
     }
 
     // Removes letter from current word submission
@@ -321,22 +326,23 @@ public class forgetleScript : MonoBehaviour
         SetColors("11111");
         numLettersInputted--;
         textDisplays[numLettersInputted].text = "_";
-        wordArr[numLettersInputted] = ' ';
+        wordCharArr[numLettersInputted] = ' ';
     }
 
     // Adds letter to current word submission
     private void SubmitLetter(String letter){
         SetColors("11111");
         textDisplays[numLettersInputted].text = letter;
-        wordArr[numLettersInputted] = char.Parse(letter);
+        wordCharArr[numLettersInputted] = char.Parse(letter);
         numLettersInputted++;
     }
 
     // Submits word based on given stage
     private bool SubmitWord(int currentStage){
-        String result = new String(wordArr).ToLower();
+        bool returnStatus = false;
+        String result = new String(wordCharArr).ToLower();
         if (wordleDictionary.HasWord(result)){
-            if (possiblePaths.IndexOf(result) != -1 && !(submitList.Contains(result))){
+            if (possiblePaths.Contains(result) && !(submitList.Contains(result))){
                 Debug.LogFormat("[Forgetle #{0}] Submitted '{1}' on stage {2}", ModuleID, result, currentStage); 
                 numCurrentStage++;
                 numLettersInputted = 0;
@@ -345,8 +351,9 @@ public class forgetleScript : MonoBehaviour
                 if (numCurrentStage == numStagesOnBomb || numCurrentStage >= maxStages){
                     SolveModule();
                 } else {
+                    
                     possiblePaths = ReturnPossiblePaths(numCurrentStage);
-                    if (possiblePaths == "{}"){
+                    if (possiblePaths[0] == null){
                         Debug.LogFormat("[Forgetle #{0}] There are no words in the word bank that would match the next stage. Resetting to stage 1...", ModuleID);
                         for(int i = 1; i <= currentStage; i++){
                             submitList[i] = null;
@@ -355,22 +362,19 @@ public class forgetleScript : MonoBehaviour
                         numCurrentStage = 1;
                         StartCoroutine(RevealWord("_____", "00000"));
                         numLettersInputted = 0;
-                        Debug.LogFormat("[Forgetle #{0}] Stage 1 Possible Words: {1}", ModuleID, initialPaths);
-                        return false;
                     }
-                    Debug.LogFormat("[Forgetle #{0}] Stage {1} Possible Words: {2}", ModuleID, numCurrentStage, possiblePaths);
+                    Debug.LogFormat("[Forgetle #{0}] Stage {1} Possible Words: {2}", ModuleID, numCurrentStage, returnReadableWordList(possiblePaths));
+                    returnStatus = true;
                 }
-                return true;
             } else {
-                SetColors(data[1][currentStage - 1]);
+                SetColors(colors[currentStage - 1]);
                 Debug.LogFormat("[Forgetle #{0}] Struck for breaking the rules with '{1}'!", ModuleID, result);
                 GetComponent<KMBombModule>().HandleStrike();
-                return false;
             }
         } else {
             SetColors("00000");
-            return false;
         }   
+        return returnStatus;
     }
 
     // Prepares module for solving if there are insufficient amount of stages
@@ -460,15 +464,31 @@ public class forgetleScript : MonoBehaviour
         return res; 
     }
 
-    // private void TestListGeneration(int testValue){
-    //     words = new String[testValue];
-    //     colors = new String[testValue - 1];
-    //     String[][] testData = new String[][] {words, colors};
-    //     wordleDictionary.GenerateSingleStage(testData, 0);
-    //     Debug.LogFormat("[Forgetle #{0}] Stage 0 Word - '{1}'", ModuleID, testData[0][0]);
-    //     for (int i = 1; i < testValue; i++){
-    //         wordleDictionary.GenerateSingleStage(testData, i);
-    //         Debug.LogFormat("[Forgetle #{0}] Stage {1} Colors - {2} [pregenerated word: '{3}']", ModuleID, i, GetColorDisplays(testData[1][i - 1]), testData[0][i]);
-    //     }
-    // }
+    private String returnReadableWordList(String[] wordList){
+        sb.Length = 0;
+        sb.Append('{');
+        for (int i = 0; i < wordList.Length; i++){
+            if (i != 0){
+                sb.Append(", ");
+            }
+            sb.Append(wordList[i]);
+        }
+        sb.Append('}');
+
+
+
+        return sb.ToString();
+    }
+
+    private void TestListGeneration(int testValue){
+        String[] testWords = new String[testValue];
+        String[] testColors = new String[testValue - 1];
+        String[][] testData = new String[][] {testWords, testColors};
+        wordleDictionary.GenerateSingleStage(testData, 0);
+        Debug.LogFormat("[Forgetle #{0}] Stage 0 Word - '{1}'", ModuleID, testWords[0]);
+        for (int i = 1; i < testValue; i++){
+            wordleDictionary.GenerateSingleStage(testData, i);
+            Debug.LogFormat("[Forgetle #{0}] Stage {1} Colors - {2} [pregenerated word: '{3}']", ModuleID, i, GetColorDisplays(testColors[i - 1]), testWords[i]);
+        }
+    }
 }

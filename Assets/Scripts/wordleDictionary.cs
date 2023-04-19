@@ -220,25 +220,28 @@ public class wordleDictionary {
         if (stageNumber == 0){
         data[0][0] = dictionary[UnityEngine.Random.Range(0, dictionary.Length)];
         } else {
+            String[] triedWords = new String[50];
+            String[] words = data[0];
+            String[] colors = data[1];
+            String maxMinSimilarWord = "";
             int attempt = 0;
             int maxMinSimilarity = -1;
-            String[] triedWords = new String[50];
-            String maxMinSimilarWord = "";
+            
             bool altWordSet = false;
             bool wordGenerated = false;
             while (!wordGenerated){
                 String word = dictionary[UnityEngine.Random.Range(0, dictionary.Length)];
-                if (!triedWords.Contains(word) && !data[0].Contains(word)){
+                if (!triedWords.Contains(word) && !words.Contains(word)){
                     triedWords[attempt] = word;
-                    int similarity = CalculateSimilarityAndSetColors(data[0][stageNumber - 1], word, data[1], stageNumber - 1);
+                    int similarity = CalculateSimilarityAndSetColors(words[stageNumber - 1], word, colors, stageNumber - 1);
                     if (similarity > 3 && similarity < 9){
-                        data[0][stageNumber] = word;
+                        words[stageNumber] = word;
                         wordGenerated = true;
                     } else if (attempt > 48 || attempt * 2 >= dictionary.Length - stageNumber){
                         for (int i = 0; i <= attempt; i++){
                             triedWords[i] = null;
                         }
-                        data[0][stageNumber] = maxMinSimilarWord;
+                        words[stageNumber] = maxMinSimilarWord;
                         wordGenerated = true;
                     } else {
                         if (similarity < 9 && similarity > maxMinSimilarity || !altWordSet) {
@@ -250,6 +253,8 @@ public class wordleDictionary {
                     attempt++;
                 }
             }
+            data[0] = words;
+            data[1] = colors;
         }
     }
 
