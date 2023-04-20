@@ -56,11 +56,10 @@ public class forgetleScript : MonoBehaviour
     private bool readyNullSolve = false;
     private bool readySubmitStages = false;
     private bool focused = false;
-
     private bool displayRewound = true;
 
     // Boolean switch to toggle between debug mode and play mode. Only for developers' use.
-    private bool debugMode = true;
+    private const bool debugMode = false;
     
     void Awake()
     {
@@ -172,11 +171,11 @@ public class forgetleScript : MonoBehaviour
         if (!debugMode){
             numStagesOnBomb = BombInfo.GetSolvableModuleNames().Where(x => !ignoredModules.Contains(x)).Count();
         } else {
-            numStagesOnBomb = 6;
+            numStagesOnBomb = 20;
         }
     
         if (numStagesOnBomb < 2){
-            TestListGeneration(20);
+            // TestListGeneration(wordleDictionary.getLength() - 1);
             SetUpNullVictory();
         } else {
             words = new String[numStagesOnBomb];
@@ -351,11 +350,10 @@ public class forgetleScript : MonoBehaviour
                 if (numCurrentStage == numStagesOnBomb || numCurrentStage >= maxStages){
                     SolveModule();
                 } else {
-                    
                     possiblePaths = ReturnPossiblePaths(numCurrentStage);
-                    if (possiblePaths[0] == null){
+                    if (possiblePaths == null){
                         Debug.LogFormat("[Forgetle #{0}] There are no words in the word bank that would match the next stage. Resetting to stage 1...", ModuleID);
-                        for(int i = 1; i <= currentStage; i++){
+                        for (int i = 1; i <= currentStage; i++){
                             submitList[i] = null;
                         }
                         possiblePaths = initialPaths;
@@ -474,21 +472,18 @@ public class forgetleScript : MonoBehaviour
             sb.Append(wordList[i]);
         }
         sb.Append('}');
-
-
-
         return sb.ToString();
     }
 
-    private void TestListGeneration(int testValue){
-        String[] testWords = new String[testValue];
-        String[] testColors = new String[testValue - 1];
-        String[][] testData = new String[][] {testWords, testColors};
-        wordleDictionary.GenerateSingleStage(testData, 0);
-        Debug.LogFormat("[Forgetle #{0}] Stage 0 Word - '{1}'", ModuleID, testWords[0]);
-        for (int i = 1; i < testValue; i++){
-            wordleDictionary.GenerateSingleStage(testData, i);
-            Debug.LogFormat("[Forgetle #{0}] Stage {1} Colors - {2} [pregenerated word: '{3}']", ModuleID, i, GetColorDisplays(testColors[i - 1]), testWords[i]);
-        }
-    }
+    // private void TestListGeneration(int testValue){
+    //     String[] testWords = new String[testValue];
+    //     String[] testColors = new String[testValue - 1];
+    //     String[][] testData = new String[][] {testWords, testColors};
+    //     wordleDictionary.GenerateSingleStage(testData, 0);
+    //     Debug.LogFormat("[Forgetle #{0}] Stage 0 Word - '{1}'", ModuleID, testWords[0]);
+    //     for (int i = 1; i < testValue; i++){
+    //         wordleDictionary.GenerateSingleStage(testData, i);
+    //         Debug.LogFormat("[Forgetle #{0}] Stage {1} Colors - {2} [pregenerated word: '{3}']", ModuleID, i, GetColorDisplays(testColors[i - 1]), testWords[i]);
+    //     }
+    // }
 }
