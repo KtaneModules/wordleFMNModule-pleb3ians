@@ -486,4 +486,96 @@ public class forgetleScript : MonoBehaviour
     //         Debug.LogFormat("[Forgetle #{0}] Stage {1} Colors - {2} [pregenerated word: '{3}']", ModuleID, i, GetColorDisplays(testColors[i - 1]), testWords[i]);
     //     }
     // }
+
+    // Twitch Plays support
+    #pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"!{0} submit <word> [Submits the specified word] | Multiple words can be submitted using spaces, for example: !{0} submit FUNNY BINGO CARDS | If the display is showing all exclamation points, just use !{0} submit";
+    #pragma warning restore 414
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        if (command.ToLowerInvariant().Equals("submit"))
+        {
+            if (!readyNullSolve)
+            {
+                yield return "sendtochaterror The display is not showing all exclamation points!";
+                yield break;
+            }
+            yield return null;
+            keyboardButtons[27].OnInteract();
+            yield break;
+        }
+        if (command.ToLowerInvariant().StartsWith("submit "))
+        {
+            char[] validChars = { 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M' };
+            string[] words = command.Substring(7).Split(' ');
+            for (int i = 0; i < words.Length; i++)
+            {
+                for (int j = 0; j < words[i].Length; j++)
+                {
+                    if (!validChars.Contains(words[i].ToUpperInvariant()[j]))
+                    {
+                        yield return "sendtochaterror!f The specified word '" + words[i] + "' contains an invalid character!";
+                        yield break;
+                    }
+                }
+                if (words[i].Length != 5)
+                {
+                    yield return "sendtochaterror!f The specified word '" + words[i] + "' must be 5 letters long!";
+                    yield break;
+                }
+            }
+            if (readyNullSolve)
+            {
+                yield return "sendtochaterror Words cannot be submitted when the display is showing all exclamation points!";
+                yield break;
+            }
+            yield return null;
+            for (int i = 0; i < words.Length; i++)
+            {
+                while (numLettersInputted > 0)
+                {
+                    keyboardButtons[26].OnInteract();
+                    yield return new WaitForSeconds(.1f);
+                }
+                string wordToSubmit = words[i].ToUpperInvariant();
+                for (int j = 0; j < 5; j++)
+                {
+                    keyboardButtons[Array.IndexOf(validChars, wordToSubmit[j])].OnInteract();
+                    yield return new WaitForSeconds(.1f);
+                }
+                keyboardButtons[27].OnInteract();
+                yield return new WaitForSeconds(.1f);
+            }
+        }
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        if (readyNullSolve)
+        {
+            keyboardButtons[27].OnInteract();
+            yield return new WaitForSeconds(.1f);
+        }
+        else
+        {
+            while (!readySubmitStages) yield return true;
+            char[] alphabet = { 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm' };
+            while (!words[numCurrentStage].StartsWith(wordCharArr.Join("").ToLower().Replace(" ", "")))
+            {
+                keyboardButtons[26].OnInteract();
+                yield return new WaitForSeconds(.1f);
+            }
+            while (!moduleSolved)
+            {
+                int start = numLettersInputted;
+                for (int i = start; i < 5; i++)
+                {
+                    keyboardButtons[Array.IndexOf(alphabet, words[numCurrentStage][i])].OnInteract();
+                    yield return new WaitForSeconds(.1f);
+                }
+                keyboardButtons[27].OnInteract();
+                yield return new WaitForSeconds(.1f);
+            }
+        }
+    }
 }
