@@ -545,6 +545,8 @@ public class forgetleScript : MonoBehaviour
                 }
                 keyboardButtons[27].OnInteract();
                 yield return new WaitForSeconds(.1f);
+                if (!wordleDictionary.HasWord(words[i].ToLower()))
+                    yield break;
             }
         }
     }
