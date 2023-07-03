@@ -8372,7 +8372,6 @@ MonoBehaviour:
   - {fileID: 23484892270740286}
   sounds:
   - {fileID: 8300000, guid: 66cb3566e8e554a48801e1a1c7be8a09, type: 3}
-  fontColors: []
   ModuleSelectable: {fileID: 114078438042758174}
 --- !u!114 &114660050907866896
 MonoBehaviour:

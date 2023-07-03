@@ -58,11 +58,14 @@ public class forgetleScript : MonoBehaviour
     private bool focused = false;
     private bool displayRewound = true;
 
-    // Boolean switch to toggle between debug mode and play mode. Only for developers' use.
+    // Boolean switch to toggle between debug mode and play mode. Only for developers' use. Make sure this is false prior to play.
     private const bool debugMode = false;
     
     void Awake()
     {
+        if (debugMode){
+            Debug.Log("Debug Mode is currently on! If you are playing a bomb and you see this message in the logfile, then @plebeians on Discord did not set up this module correctly!");
+        }
         maxStages = wordleDictionary.GetLength() - 1;
         if (ignoredModules == null){
             ignoredModules = BossModule.GetIgnoredModules("Forgetle", new string[] {

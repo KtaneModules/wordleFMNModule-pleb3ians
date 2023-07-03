@@ -18,7 +18,8 @@ MonoBehaviour:
     of a sequence of colors after every solve, and submit a set of words that follow
     a modified version of Wordle rules.\n\nManual HTML: https://ktane.timwi.de/HTML/Forgetle.html\nManual
     PDF: https://ktane.timwi.de/PDF/Forgetle.pdf\n\nModule ID: forgetle\n\r\nModule
-    created by plebeians."
-  version: 1.2
+    created by plebeians.\nTwitch Plays support by eXish.\n\nSpecial thanks to Quinn
+    for coming up with a better name than \"Wordle Me Not\"."
+  version: 1.3.2
   outputFolder: build
   previewImage: {fileID: 2800000, guid: d5088ed852ecdbd4eabedcadb6c65a03, type: 3}
