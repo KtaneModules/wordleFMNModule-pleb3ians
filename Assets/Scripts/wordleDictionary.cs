@@ -314,7 +314,7 @@ public class wordleDictionary {
             if (wordOne[i] != '#'){
                 for (int j = 1; j < 5; j++){
                     if (wordTwo[(j + i) % 5] != '#' && wordTwo[(j + i) % 5] == wordOne[i]){
-                        wordTwo[((j + i) % (5 - minIndex) + minIndex)] = '#';
+                        wordTwo[(j + i) % 5] = '#';
                         wordOne[i] = '#';
                         colors[i] = 1;
                         break;
