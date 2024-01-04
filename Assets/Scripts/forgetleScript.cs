@@ -203,8 +203,8 @@ public class forgetleScript : MonoBehaviour
                 if (!debugMode){
                     tempSolved = BombInfo.GetSolvedModuleNames().Where(x => !ignoredModules.Contains(x)).Count();
                 }                
-                if (numCurrentStage != tempSolved){
-                    numCurrentStage = tempSolved;
+                if (numCurrentStage < tempSolved){
+                    numCurrentStage++;
                     if (numCurrentStage >= numStagesOnBomb || numCurrentStage >= maxStages){
                         initialPaths = ReturnPossiblePaths(1);
                         possiblePaths = initialPaths;
@@ -265,7 +265,7 @@ public class forgetleScript : MonoBehaviour
                 }
             } else if (name == "submit"){
                 if (debugMode && !readySubmitStages){
-                    tempSolved++;
+                    tempSolved += 1;
                 } else {
                     if (readyNullSolve){
                         soundAndPunch = true;
